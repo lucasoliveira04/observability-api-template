@@ -36,11 +36,15 @@ public class UserController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        try {
-            return ResponseEntity.ok(userService.getAllUsers(page, size));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
+        return ResponseEntity.ok(userService.getAllUsers(page, size, "getAllFromPostgres"));
+    }
+
+    @GetMapping("/all-redis")
+    public ResponseEntity<Page<UserResponse>> getAllUsersFromRedis(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(userService.getAllUsers(page, size, "getAllFromRedis"));
     }
 
     @GetMapping("/by-ids")

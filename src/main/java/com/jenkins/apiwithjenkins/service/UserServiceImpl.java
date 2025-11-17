@@ -9,6 +9,7 @@ import com.jenkins.apiwithjenkins.service.getDataUser.IGetData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,22 +25,25 @@ public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
     private final Map<String, IGetData> getDataStrategies;
+    private final UserMapper userMapper;
 
     @Override
     public UserResponse saveUser(UserDto userDto) {
-        Users user = UserMapper.toEntity(userDto);
+        Users user = userMapper.toEntity(userDto);
         Users savedUser = userRepository.save(user);
-        return UserMapper.toResponse(savedUser);
+        return userMapper.toResponse(savedUser);
     }
 
     @Override
-    public Page<UserResponse> getAllUsers(int page, int size) {
+    public Page<UserResponse> getAllUsers(int page, int size, String strategy) {
+
         Pageable pageable = PageRequest.of(page, size);
 
-        IGetData getData = getDataStrategies.get("getAllFromPostgres");
-        Page<Users> users = getData.getUsers(pageable);
+        IGetData<UserResponse> dataStrategy = getDataStrategies.get(strategy);
 
-        return users.map(UserMapper::toResponse);
+        List<UserResponse> users = dataStrategy.getUsers(pageable);
+
+        return new PageImpl<>(users, pageable, users.size());
     }
 
     @Override

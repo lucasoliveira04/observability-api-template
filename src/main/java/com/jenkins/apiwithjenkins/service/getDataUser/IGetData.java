@@ -1,9 +1,10 @@
 package com.jenkins.apiwithjenkins.service.getDataUser;
 
-import com.jenkins.apiwithjenkins.entity.Users;
-import org.springframework.data.domain.Page;
+import com.jenkins.apiwithjenkins.dto.UserDto;
 import org.springframework.data.domain.Pageable;
 
-public interface IGetData {
-    Page<Users> getUsers(Pageable pageable);
+import java.util.List;
+
+public interface IGetData<T> {
+    List<T> getUsers(Pageable pageable);
 }

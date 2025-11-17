@@ -15,7 +15,7 @@ public interface IUserService {
     UserResponse saveUser(UserDto userDto);
 
     @Transactional(readOnly = true)
-    Page<UserResponse> getAllUsers(int page, int size);
+    Page<UserResponse> getAllUsers(int page, int size, String strategy);
 
     @Transactional(readOnly = true)
     Iterable<Users> findByUserIds(List<UUID> userIds);

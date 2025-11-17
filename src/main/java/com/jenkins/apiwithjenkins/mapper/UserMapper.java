@@ -8,9 +8,9 @@ import com.jenkins.apiwithjenkins.entity.Users;
 
 import java.util.List;
 
-public class UserMapper {
+public record UserMapper() {
 
-    public static Users toEntity(UserDto userDto) {
+    public Users toEntity(UserDto userDto) {
         Users user = Users.builder()
                 .name(userDto.name())
                 .email(userDto.email())
@@ -31,10 +31,11 @@ public class UserMapper {
                 .toList();
 
         user.setAddress(addresses);
+
         return user;
     }
 
-    public static UserResponse toResponse(Users user) {
+    public UserResponse toResponse(Users user) {
         return new UserResponse(
                 user.getId(),
                 user.getName(),
